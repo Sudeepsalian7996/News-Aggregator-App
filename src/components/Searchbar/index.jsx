@@ -1,10 +1,21 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Box, InputBase, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { setSearch } from "../../features";
 
 // Search Bar component
 const SearchBar = ({ isSearchOpen, setIsSearchOpen }) => {
+  const dispatch = useDispatch();
+
+  //Handle search
+  const handleSearch = (event) => {
+    if (event.key === "Enter") {
+      dispatch(setSearch(event.target.value));
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -58,6 +69,7 @@ const SearchBar = ({ isSearchOpen, setIsSearchOpen }) => {
           },
         }}
         inputProps={{ "aria-label": "search" }}
+        onKeyDown={handleSearch}
       />
     </Box>
   );

@@ -29,11 +29,30 @@ const NewsCardWithImageOrAvatar = ({
             alt={title}
           />
           <CardContent>
-            <Typography variant="h6">{title}</Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                overflow: "hidden",
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 2,
+              }}
+            >
+              {title}
+            </Typography>
             <Typography variant="subtitle2" color="text.secondary">
               {source} • {moment(publishedAt).format("DD MMMM YYYY")}
             </Typography>
-            <Typography variant="body2" sx={{ mt: 1 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                mt: 1,
+                overflow: "hidden",
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 5,
+              }}
+            >
               {description}
             </Typography>
           </CardContent>
@@ -43,7 +62,17 @@ const NewsCardWithImageOrAvatar = ({
           <CardContent sx={{ display: "flex", alignItems: "center" }}>
             <Avatar sx={{ mr: 2 }}>{author ? author[0] : "A"}</Avatar>
             <Box>
-              <Typography variant="h6">{title}</Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  overflow: "hidden",
+                  display: "-webkit-box",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 2,
+                }}
+              >
+                {title}
+              </Typography>
               <Typography variant="subtitle2" color="text.secondary">
                 {source} • {moment(publishedAt).format("DD MMMM YYYY")}
               </Typography>
@@ -51,7 +80,17 @@ const NewsCardWithImageOrAvatar = ({
             </Box>
           </CardContent>
           <CardContent>
-            <Typography variant="body2">{description}</Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                overflow: "hidden",
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 5,
+              }}
+            >
+              {description}
+            </Typography>
           </CardContent>
         </>
       )}

@@ -4,9 +4,7 @@ import NewsCardFullWidthImage from "./NewsCardFullWidthImage";
 import NewsCardHorizontal from "./NewsCardHorizontal";
 import NewsCardWithImageOrAvatar from "./NewsCardWithImageOrAvatar";
 
-const NewsList = ({ newsData }) => {
-  const { allNews, guardianNews, newYorkTimesNews } = newsData;
-
+const NewsList = ({ allNews, guardianNews, newYorkTimesNews }) => {
   // Combine all news into a single array with an identifier for the source
   const combinedNews = [
     ...allNews.map((news) => ({ ...news, source: "allNews" })),
@@ -32,7 +30,7 @@ const NewsList = ({ newsData }) => {
           )}
           {news.source === "newYorkTimes" && news.multimedia && (
             <NewsCardFullWidthImage
-              imageUrl={news.multimedia[1].url}
+              imageUrl={news?.multimedia[1]?.url}
               title={news.headline.main}
               source={news.source}
               publishedAt={news.pub_date}

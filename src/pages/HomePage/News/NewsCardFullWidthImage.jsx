@@ -22,11 +22,30 @@ const NewsCardFullWidthImage = ({
         />
       )}
       <CardContent>
-        <Typography variant="h6">{title}</Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            overflow: "hidden",
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2,
+          }}
+        >
+          {title}
+        </Typography>
         <Typography variant="subtitle2" color="text.secondary">
           {source} • {moment(publishedAt).format("DD MMMM YYYY")}
         </Typography>
-        <Typography variant="body2" sx={{ mt: 1 }}>
+        <Typography
+          variant="body2"
+          sx={{
+            mt: 1,
+            overflow: "hidden",
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 5,
+          }}
+        >
           {description}
         </Typography>
         <Typography variant="body2" sx={{ mt: 1 }}>

@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setCategory, setDate, setSource } from "../../features";
 
 // Reusable Dropdown component
 const Dropdown = ({ label, options }) => {
   const [value, setValue] = useState("");
+  const dispatch = useDispatch();
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    if (label === "Category") {
+      dispatch(setCategory(event.target.value));
+    } else if (label === "Source") {
+      dispatch(setSource(event.target.value));
+    } else if (label === "Date") {
+      dispatch(setDate(event.target.value));
+    }
   };
 
   return (
@@ -19,7 +29,10 @@ const Dropdown = ({ label, options }) => {
         sx={{ padding: 0, height: 38 }}
       >
         {options.map((option, index) => (
-          <MenuItem key={index} value={option}>
+          <MenuItem
+            key={index}
+            value={option.value === "" ? "all" : option.value}
+          >
             {option.label}
           </MenuItem>
         ))}

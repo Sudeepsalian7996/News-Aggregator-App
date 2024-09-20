@@ -24,21 +24,28 @@ const Header = () => {
 
   // Dropdown options for category, source, and date
   const categories = [
-    { label: "Tech", value: "Tech" },
-    { label: "Sports", value: "Sports" },
-    { label: "Health", value: "Health" },
+    { label: "All Category", value: "" },
+    { label: "Technology", value: "technology" },
+    { label: "Business", value: "business" },
+    { label: "Politics", value: "politics" },
+    { label: "Sports", value: "sport" },
+    { label: "World", value: "world" },
   ];
 
   const sources = [
-    { label: "NY Times", value: "NY Times" },
-    { label: "BBC", value: "BBC" },
-    { label: "CNN", value: "CNN" },
+    { label: "All source", value: "" },
+    { label: "BBC News", value: "bbc-news" },
+    { label: "CNN", value: "cnn" },
+    { label: "The Guardian", value: "the-guardian-uk" },
+    { label: "The New York Times", value: "the-new-york-times" },
   ];
 
   const dates = [
-    { label: "Last 24 hours", value: "Last 24 hours" },
-    { label: "Last 7 days", value: "Last 7 days" },
-    { label: "Last 30 days", value: "Last 30 days" },
+    { label: "Lifetime", value: "lifetime" },
+    { label: "Last 24 hours", value: "last_24_hours" },
+    { label: "Last 7 days", value: "last_7_days" },
+    { label: "Last 30 days", value: "last_30_days" },
+    { label: "Last 90 days", value: "last_90_days" },
   ];
 
   return (
