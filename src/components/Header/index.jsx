@@ -8,13 +8,17 @@ import {
   Box,
   Button,
   Drawer,
+  Badge,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchBar from "../Searchbar";
 import Dropdown from "../Dropdown";
 import CustomiseIcon from "../../assets/Icons/CustomiseIcon";
-import PersonalizedPopup from "../../pages/HomePage/PersonalizedPopup";
+import PersonalizedPopup from "../../pages/HomePage/Customization/PersonalizedPopup";
+import { categories, sources, dates } from "../../data/filterData";
+import { selectCount } from "../../features";
+import { useSelector } from "react-redux";
 
 // Main Header component
 const Header = () => {
@@ -22,32 +26,9 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  // Dropdown options for category, source, and date
-  const categories = [
-    { label: "All Category", value: "" },
-    { label: "Technology", value: "technology" },
-    { label: "Business", value: "business" },
-    { label: "Politics", value: "politics" },
-    { label: "Sports", value: "sport" },
-    { label: "World", value: "world" },
-  ];
-
-  const sources = [
-    { label: "All source", value: "" },
-    { label: "BBC News", value: "bbc-news" },
-    { label: "CNN", value: "cnn" },
-    { label: "The Guardian", value: "the-guardian-uk" },
-    { label: "The New York Times", value: "the-new-york-times" },
-  ];
-
-  const dates = [
-    { label: "Lifetime", value: "lifetime" },
-    { label: "Last 24 hours", value: "last_24_hours" },
-    { label: "Last 7 days", value: "last_7_days" },
-    { label: "Last 30 days", value: "last_30_days" },
-    { label: "Last 90 days", value: "last_90_days" },
-  ];
-
+  //Redux selectors
+  const filterCount = useSelector(selectCount);
+  console.log("filterCount>>", filterCount);
   return (
     <>
       <AppBar
@@ -194,7 +175,6 @@ const Header = () => {
                   textTransform: "none",
                   boxShadow: "none",
                   border: "1px solid",
-
                   "&:hover": {
                     boxShadow: "none",
                     opacity: "0.8",
@@ -206,8 +186,20 @@ const Header = () => {
                   <CustomiseIcon />
                 ) : (
                   <>
-                    <CustomiseIcon />
-                    <span> Customise</span>
+                    <Badge
+                      badgeContent={filterCount > 0 ? filterCount : "0"}
+                      sx={{
+                        "& .MuiBadge-badge": {
+                          position: "absolute",
+                          top: -6,
+                          right: -14,
+                        },
+                      }}
+                      color="primary"
+                    >
+                      <CustomiseIcon />
+                      <span> Customise</span>
+                    </Badge>
                   </>
                 )}
               </Button>

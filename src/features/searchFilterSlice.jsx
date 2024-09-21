@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  category: "",
+  category: [],
   search: "",
   date: "",
-  source: "",
-  author: "",
+  source: [],
+  author: [],
+  count: 0,
 };
 
 const searchFilterSlice = createSlice({
@@ -27,6 +28,9 @@ const searchFilterSlice = createSlice({
     setAuthor: (state, action) => {
       state.author = action.payload;
     },
+    setCount: (state, action) => {
+      state.count = action.payload;
+    },
     clearFilters: () => initialState,
   },
 });
@@ -37,6 +41,7 @@ export const selectSearch = (state) => state.searchFilter.search;
 export const selectDate = (state) => state.searchFilter.date;
 export const selectSource = (state) => state.searchFilter.source;
 export const selectAuthor = (state) => state.searchFilter.author;
+export const selectCount = (state) => state.searchFilter.count;
 
 export const {
   setCategory,
@@ -44,6 +49,7 @@ export const {
   setDate,
   setSource,
   setAuthor,
+  setCount,
   clearFilters,
 } = searchFilterSlice.actions;
 

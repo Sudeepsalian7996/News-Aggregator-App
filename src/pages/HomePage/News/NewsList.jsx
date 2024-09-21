@@ -4,12 +4,13 @@ import NewsCardFullWidthImage from "./NewsCardFullWidthImage";
 import NewsCardHorizontal from "./NewsCardHorizontal";
 import NewsCardWithImageOrAvatar from "./NewsCardWithImageOrAvatar";
 
-const NewsList = ({ allNews, guardianNews, newYorkTimesNews }) => {
+const NewsList = ({ allNews, guardianNews, newYorkTimesNews, authorData }) => {
   // Combine all news into a single array with an identifier for the source
   const combinedNews = [
     ...allNews.map((news) => ({ ...news, source: "allNews" })),
     ...newYorkTimesNews.map((news) => ({ ...news, source: "newYorkTimes" })),
     ...guardianNews.map((news) => ({ ...news, source: "guardianNews" })),
+    ...authorData,
   ];
 
   return (
@@ -49,6 +50,35 @@ const NewsList = ({ allNews, guardianNews, newYorkTimesNews }) => {
               id={news.id}
             />
           )}
+          <Grid container spacing={2}>
+            {newYorkTimesNews?.map((news, index) => (
+              <Grid item xs={12} sm={8} md={6} key={index}>
+                <NewYorkNewsCard
+                  imageUrl={news?.multimedia[10]?.url}
+                  title={news?.headline?.main}
+                  source={news?.source}
+                  publishedAt={news?.pub_date}
+                  webUrl={news?.web_url}
+                  id={news?.id}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <Grid container spacing={2}>
+            {allNews.map((news, index) => (
+              <Grid item xs={12} sm={8} md={4} key={index}>
+                <WorldNewsCard
+                  author={news.author}
+                  imageUrl={news.urlToImage}
+                  title={news.title}
+                  source={news.source.name}
+                  publishedAt={news.publishedAt}
+                  description={news.description}
+                  webUrl={news.url}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </Grid>
       ))}
     </Grid>

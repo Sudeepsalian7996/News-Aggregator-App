@@ -8,8 +8,10 @@ export const newYorkTimesApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: NEWYORK_TIMES_BASE_URL }),
   endpoints: (builder) => ({
     getAllNewYorkTimesNews: builder.query({
-      query: ({ searchText, fromDate, category }) =>
-        `?q=${searchText}&from=${fromDate}&fq=${category}&api-key=${NEWYORK_TIMES_API_KEY}`,
+      query: ({ searchText, fromDate, category, source }) =>
+        `?q=${searchText}&from=${fromDate}&fq=${category}${
+          source !== "all" ? source : ""
+        }&api-key=${NEWYORK_TIMES_API_KEY}`,
     }),
   }),
 });

@@ -11,9 +11,9 @@ const Dropdown = ({ label, options }) => {
   const handleChange = (event) => {
     setValue(event.target.value);
     if (label === "Category") {
-      dispatch(setCategory(event.target.value));
+      dispatch(setCategory([event.target.value]));
     } else if (label === "Source") {
-      dispatch(setSource(event.target.value));
+      dispatch(setSource([event.target.value]));
     } else if (label === "Date") {
       dispatch(setDate(event.target.value));
     }

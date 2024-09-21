@@ -9,7 +9,7 @@ export const guardianApi = createApi({
   endpoints: (builder) => ({
     getAllGuardianNews: builder.query({
       query: ({ searchText, fromDate, category }) =>
-        `search?q=${searchText}${fromDate ? `&from-date=${fromDate}` : ""}&${
+        `search?q=${searchText}${fromDate ? `&from-date=${fromDate}` : ""}${
           category ? `&section=${category}` : ""
         }&api-key=${GUARDIAN_API_KEY}`,
     }),

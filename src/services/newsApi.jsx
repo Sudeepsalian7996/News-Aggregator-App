@@ -8,8 +8,10 @@ export const newsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: NEWS_BASE_URL }),
   endpoints: (builder) => ({
     getAllNews: builder.query({
-      query: ({ searchText, fromDate, category }) =>
-        `everything?q=${searchText}&from=${fromDate}&sources=bbc-news&pageSize=10&apiKey=${NEWS_API_KEY}`,
+      query: ({ searchText, fromDate, source }) =>
+        `everything?q=${searchText}&from=${fromDate}${
+          source !== "all" && source !== "" ? `&sources=${source}` : ""
+        }&pageSize=10&apiKey=${NEWS_API_KEY}`,
     }),
   }),
 });
