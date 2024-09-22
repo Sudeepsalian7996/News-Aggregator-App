@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { setCategory, setDate, setSource } from "../../features";
 
 // Reusable Dropdown component
-const Dropdown = ({ label, options }) => {
+const Dropdown = ({ label, options, setNewsPage }) => {
   const [value, setValue] = useState("");
   const dispatch = useDispatch();
 
@@ -17,6 +17,7 @@ const Dropdown = ({ label, options }) => {
     } else if (label === "Date") {
       dispatch(setDate(event.target.value));
     }
+    setNewsPage(1);
   };
 
   return (

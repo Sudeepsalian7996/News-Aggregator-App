@@ -21,7 +21,7 @@ import { selectCount } from "../../features";
 import { useSelector } from "react-redux";
 
 // Main Header component
-const Header = () => {
+const Header = ({ setNewsPage }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -109,6 +109,7 @@ const Header = () => {
                   <SearchBar
                     isSearchOpen={isSearchOpen}
                     setIsSearchOpen={setIsSearchOpen}
+                    setNewsPage={setNewsPage}
                   />
                 </Box>
               </Box>
@@ -160,7 +161,7 @@ const Header = () => {
 
           {/* Search Bar for desktop */}
           <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
-            <SearchBar />
+            <SearchBar setNewsPage={setNewsPage} />
           </Box>
 
           {/* Customize Button for desktop */}
@@ -208,9 +209,17 @@ const Header = () => {
 
           {/* Dropdowns for Desktop */}
           <Box sx={{ display: { xs: "none", md: "flex" }, ml: 2 }}>
-            <Dropdown label="Category" options={categories} />
-            <Dropdown label="Source" options={sources} />
-            <Dropdown label="Date" options={dates} />
+            <Dropdown
+              label="Category"
+              options={categories}
+              setNewsPage={setNewsPage}
+            />
+            <Dropdown
+              label="Source"
+              options={sources}
+              setNewsPage={setNewsPage}
+            />
+            <Dropdown label="Date" options={dates} setNewsPage={setNewsPage} />
           </Box>
         </Toolbar>
 
@@ -240,9 +249,21 @@ const Header = () => {
                 gap: "25px",
               }}
             >
-              <Dropdown label="Category" options={categories} />
-              <Dropdown label="Source" options={sources} />
-              <Dropdown label="Date" options={dates} />
+              <Dropdown
+                label="Category"
+                options={categories}
+                setNewsPage={setNewsPage}
+              />
+              <Dropdown
+                label="Source"
+                options={sources}
+                setNewsPage={setNewsPage}
+              />
+              <Dropdown
+                label="Date"
+                options={dates}
+                setNewsPage={setNewsPage}
+              />
             </Box>
           </Box>
         </Drawer>

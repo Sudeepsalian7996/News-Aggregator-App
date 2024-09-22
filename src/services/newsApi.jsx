@@ -8,10 +8,10 @@ export const newsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: NEWS_BASE_URL }),
   endpoints: (builder) => ({
     getAllNews: builder.query({
-      query: ({ searchText, fromDate, source }) =>
+      query: ({ searchText, fromDate, source, page }) =>
         `everything?q=${searchText}&from=${fromDate}${
           source !== "all" && source !== "" ? `&sources=${source}` : ""
-        }&pageSize=10&apiKey=${NEWS_API_KEY}`,
+        }&page=${page}&pageSize=6&apiKey=${NEWS_API_KEY}`,
     }),
   }),
 });

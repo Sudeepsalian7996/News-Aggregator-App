@@ -17,14 +17,13 @@ import { useGetAllNewsQuery } from "../../services/newsApi";
 import { useGetAllGuardianNewsQuery } from "../../services/guardianApi";
 import { useGetAllNewYorkTimesNewsQuery } from "../../services/newYorkTimesApi";
 import NoDataFound from "../../components/NoDataFound";
-import WorldNewsCard from "./News/WorldNewsCard";
-import PastNewsCard from "./News/PastNewsCard";
 
 const HomePage = () => {
   const [newsDataState, setNewsDataState] = useState([]);
   const [guardianDataState, setGuardianDataState] = useState([]);
   const [newYorkDataState, setNewYorkDataState] = useState([]);
   const [authorData, setAuthorData] = useState([]);
+  const [newsPage, setNewsPage] = useState(1);
 
   const dispatch = useDispatch();
   //redux states
@@ -57,11 +56,27 @@ const HomePage = () => {
 
   const { data: newsData, isFetching: newsLoader } = useGetAllNewsQuery(
     {
+      page: newsPage,
       searchText: searchState || "world",
       fromDate: handleGetFromDate(selectedDateTypeState),
       source: sourceState,
     },
-    { skip: sourceState === "new-york-times" }
+    {
+      skip: sourceState === "new-york-times",
+      selectFromResult: ({ data, isFetching, currentData }) => {
+        // Use a ref to track initial load and differentiate page changes from filter changes
+        const shouldFetch =
+          !currentData || // First load when there is no data
+          searchState !== "" || // Search text has changed
+          sourceState !== "" || // Source filter has changed
+          selectedDateTypeState !== ""; // Date type filter has changed
+
+        return {
+          data,
+          newsLoader: shouldFetch && isFetching, // Only show loader when shouldFetch is true
+        };
+      },
+    }
   );
 
   const { data: guardianData, isFetching: guardianLoader } =
@@ -87,7 +102,7 @@ const HomePage = () => {
     if (newsData?.status === "ok") {
       // If no category is selected or "all" category is selected, set data
       if (categoryState === "" || categoryState === "all") {
-        setNewsDataState(newsData?.articles);
+        setNewsDataState([...newsDataState, ...newsData?.articles]);
       } else {
         setNewsDataState([]); // Set to empty if category is not "all"
       }
@@ -133,10 +148,10 @@ const HomePage = () => {
   const handleClearAllFilter = () => {
     dispatch(clearFilters());
   };
-  console.log("guardianData>>", guardianDataState);
+
   return (
     <>
-      <Header />
+      <Header setNewsPage={setNewsPage} />
       {newsLoader || guardianLoader || nyTimesLoader ? (
         <Box
           width="100%"
@@ -148,7 +163,7 @@ const HomePage = () => {
           <Loader />
         </Box>
       ) : (
-        <Container sx={{ marginTop: "40px" }}>
+        <Container sx={{ marginTop: "28px" }}>
           <Typography sx={{ fontSize: "32px", fontWeight: "500" }}>
             Daily Brief
           </Typography>
@@ -159,25 +174,14 @@ const HomePage = () => {
           guardianDataState.length > 0 ||
           newYorkDataState.length > 0 ||
           authorData.length > 0 ? (
-            // <NewsList
-            //   allNews={newsDataState}
-            //   guardianNews={guardianDataState}
-            //   newYorkTimesNews={newYorkDataState}
-            //   authorData={authorData}
-            // />
-            <Grid container spacing={2}>
-              {guardianDataState.map((news, index) => (
-                <Grid item xs={12} sm={12} md={6} key={index}>
-                  <PastNewsCard
-                    title={news.webTitle}
-                    sectionName={news.sectionName}
-                    publishedAt={news.webPublicationDate}
-                    webUrl={news.webUrl}
-                    id={news.id}
-                  />
-                </Grid>
-              ))}
-            </Grid>
+            <NewsList
+              globalNews={newsDataState}
+              guardianNews={guardianDataState}
+              newYorkTimesNews={newYorkDataState}
+              authorData={authorData}
+              setNewsPage={setNewsPage}
+              newsLoader={newsLoader}
+            />
           ) : (
             <NoDataFound
               hasIcon={true}
