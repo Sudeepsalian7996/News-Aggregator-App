@@ -267,6 +267,7 @@ const Header = ({ setNewsPage, setGaurdianPage, setNewyorkNewsPage }) => {
             >
               <Dropdown
                 label="Category"
+                setIsDrawerOpen={setIsDrawerOpen}
                 options={categories}
                 setNewsPage={setNewsPage}
                 setGaurdianPage={setGaurdianPage}
@@ -274,6 +275,7 @@ const Header = ({ setNewsPage, setGaurdianPage, setNewyorkNewsPage }) => {
               />
               <Dropdown
                 label="Source"
+                setIsDrawerOpen={setIsDrawerOpen}
                 options={sources}
                 setNewsPage={setNewsPage}
                 setGaurdianPage={setGaurdianPage}
@@ -281,6 +283,7 @@ const Header = ({ setNewsPage, setGaurdianPage, setNewyorkNewsPage }) => {
               />
               <Dropdown
                 label="Date"
+                setIsDrawerOpen={setIsDrawerOpen}
                 options={dates}
                 setNewsPage={setNewsPage}
                 setGaurdianPage={setGaurdianPage}

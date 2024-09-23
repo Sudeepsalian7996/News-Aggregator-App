@@ -10,12 +10,14 @@ const Dropdown = ({
   setNewsPage,
   setGaurdianPage,
   setNewyorkNewsPage,
+  setIsDrawerOpen,
 }) => {
   const [value, setValue] = useState("");
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    setIsDrawerOpen(false);
     if (label === "Category") {
       dispatch(setCategory([event.target.value]));
       setGaurdianPage(1);
