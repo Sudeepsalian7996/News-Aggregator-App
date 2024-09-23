@@ -8,10 +8,10 @@ export const guardianApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: GUARDIAN_BASE_URL }),
   endpoints: (builder) => ({
     getAllGuardianNews: builder.query({
-      query: ({ searchText, fromDate, category }) =>
+      query: ({ searchText, fromDate, category, page, limit }) =>
         `search?q=${searchText}${fromDate ? `&from-date=${fromDate}` : ""}${
           category ? `&section=${category}` : ""
-        }&api-key=${GUARDIAN_API_KEY}`,
+        }&page=${page}&page-size=${limit}&api-key=${GUARDIAN_API_KEY}`,
     }),
   }),
 });

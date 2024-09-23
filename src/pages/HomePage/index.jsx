@@ -24,6 +24,11 @@ const HomePage = () => {
   const [newYorkDataState, setNewYorkDataState] = useState([]);
   const [authorData, setAuthorData] = useState([]);
   const [newsPage, setNewsPage] = useState(1);
+  const [newsPageLoader, setNewsPageLoader] = useState(false);
+  const [newyorkNewsPage, setNewyorkNewsPage] = useState(1);
+  const [newyorkPageLoader, setNewyorkNewsPageLoader] = useState(false);
+  const [gaurdianPage, setGaurdianPage] = useState(1);
+  const [gaurdianPageLoader, setGaurdianPageLoader] = useState(false);
 
   const dispatch = useDispatch();
   //redux states
@@ -35,6 +40,10 @@ const HomePage = () => {
 
   const categoryState = categorySelector.join(",");
   const sourceState = sourceSelector.join(",");
+
+  //Define limit for pagination
+  const newsPageLimit = 6;
+  const guardianPageLimit = 8;
 
   //Convert the date into required formate
   const handleGetFromDate = (selectedDateType) => {
@@ -57,75 +66,99 @@ const HomePage = () => {
   const { data: newsData, isFetching: newsLoader } = useGetAllNewsQuery(
     {
       page: newsPage,
+      limit: newsPageLimit,
       searchText: searchState || "world",
       fromDate: handleGetFromDate(selectedDateTypeState),
       source: sourceState,
     },
     {
       skip: sourceState === "new-york-times",
-      selectFromResult: ({ data, isFetching, currentData }) => {
-        // Use a ref to track initial load and differentiate page changes from filter changes
-        const shouldFetch =
-          !currentData || // First load when there is no data
-          searchState !== "" || // Search text has changed
-          sourceState !== "" || // Source filter has changed
-          selectedDateTypeState !== ""; // Date type filter has changed
-
-        return {
-          data,
-          newsLoader: shouldFetch && isFetching, // Only show loader when shouldFetch is true
-        };
-      },
     }
   );
 
   const { data: guardianData, isFetching: guardianLoader } =
     useGetAllGuardianNewsQuery({
-      searchText: searchState,
-      fromDate: handleGetFromDate(selectedDateTypeState),
-      category: categoryState === "all" ? "" : categoryState,
+      // Parameters for the query
+      page: gaurdianPage,
+      limit: guardianPageLimit,
+      searchText: searchState || "world", // Use `searchState` or default to "world"
+      fromDate: handleGetFromDate(selectedDateTypeState), // Filter by selected date type
+      category: categoryState === "all" ? "" : categoryState, // Filter category if not "all"
     });
 
   const { data: newYorkTimesData, isFetching: nyTimesLoader } =
     useGetAllNewYorkTimesNewsQuery(
       {
-        searchText: searchState,
-        fromDate: handleGetFromDate(selectedDateTypeState),
-        category: categoryState === "all" ? "" : categoryState,
-        source: sourceState,
+        page: newyorkNewsPage, // Handles pagination
+        searchText: searchState, // Use searchState or default to "world"
+        fromDate: handleGetFromDate(selectedDateTypeState), // Filter based on the selected date type
+        category: categoryState === "all" ? "" : categoryState, // Filter category if not "all"
+        source: sourceState, // Use sourceState for source filter
       },
-      { skip: sourceState === "cnn" || sourceState === "bbc-news" }
+      {
+        // Skip query if the source is not "new-york-times"
+        skip: sourceState === "cnn" || sourceState === "bbc-news",
+      }
     );
 
   useEffect(() => {
+    handleFetchAllNews();
+  }, [newsData, newYorkTimesData, guardianData]);
+
+  const handleFetchAllNews = () => {
     // Check for general news data
     if (newsData?.status === "ok") {
-      // If no category is selected or "all" category is selected, set data
-      if (categoryState === "" || categoryState === "all") {
-        setNewsDataState([...newsDataState, ...newsData?.articles]);
+      setNewsPageLoader(false);
+      //Since we dont have currentPage in this api we are using newsPage state
+      if (newsPage === 1) {
+        setNewsDataState(newsData?.articles);
       } else {
-        setNewsDataState([]); // Set to empty if category is not "all"
+        setNewsDataState((prev) => {
+          // Filter out duplicates based on unique property
+          const uniqueArticles = newsData?.articles?.filter(
+            (article) => !prev.some((item) => item.url === article.url)
+          );
+          return [...prev, ...uniqueArticles];
+        });
       }
-    } else if (!newsData && sourceState !== "new-york-times") {
-      setNewsDataState([]); // Set to empty if API call is skipped
+    } else {
+      setNewsPageLoader(false);
     }
 
-    // Check for New York Times data
-    if (sourceState === "cnn" || sourceState === "bbc-news") {
-      setNewYorkDataState([]); // Set to empty if API call is skipped
-    } else if (newYorkTimesData?.status === "OK") {
-      setNewYorkDataState(newYorkTimesData?.response?.docs);
+    if (newYorkTimesData?.status === "OK") {
+      //Since we dont have currentPage in this api we are using the offset
+      setNewyorkNewsPageLoader(false);
+      if (newYorkTimesData?.response?.meta?.offset === 10) {
+        setNewYorkDataState(newYorkTimesData?.response?.docs);
+      } else {
+        setNewYorkDataState((prev) => {
+          // Filter out duplicates based on unique property (e.g., title, url)
+          const uniqueArticles = newYorkTimesData?.response?.docs?.filter(
+            (article) => !prev.some((item) => item.web_url === article.web_url)
+          );
+          return [...prev, ...uniqueArticles];
+        });
+      }
+    } else {
+      setNewyorkNewsPageLoader(false);
     }
 
-    // Check for Guardian data
-    if (
-      sourceState === "new-york-times" ||
-      sourceState === "cnn" ||
-      sourceState === "bbc-news"
-    ) {
-      setGuardianDataState([]); // Set to empty if API call is skipped
-    } else if (guardianData?.response?.status === "ok") {
-      setGuardianDataState(guardianData?.response?.results);
+    if (guardianData?.response?.status === "ok") {
+      setGaurdianPageLoader(false);
+      //Using current page to set the data
+      if (guardianData?.response?.currentPage === 1) {
+        setGuardianDataState(guardianData?.response?.results);
+      } else {
+        setGuardianDataState((prev) => {
+          // Filter out duplicates based on unique property (e.g., title, url)
+          const uniqueArticles = guardianData?.response?.results?.filter(
+            (article) => !prev.some((item) => item.webUrl === article.webUrl)
+          );
+          return [...prev, ...uniqueArticles];
+        });
+      }
+    } else {
+      setGaurdianPageLoader(false);
     }
 
     //Filter author data from news api since we don't have a params in the api
@@ -135,14 +168,7 @@ const HomePage = () => {
       );
       setAuthorData(filteredAuthor);
     }
-  }, [
-    newsData,
-    newYorkTimesData,
-    guardianData,
-    categoryState,
-    sourceState,
-    authorSelector,
-  ]);
+  };
 
   //Handle clear all filters
   const handleClearAllFilter = () => {
@@ -151,8 +177,13 @@ const HomePage = () => {
 
   return (
     <>
-      <Header setNewsPage={setNewsPage} />
-      {newsLoader || guardianLoader || nyTimesLoader ? (
+      <Header
+        setNewsPage={setNewsPage}
+        setGaurdianPage={setGaurdianPage}
+        setNewyorkNewsPage={setNewyorkNewsPage}
+      />
+      {(newsLoader || guardianLoader || nyTimesLoader) &&
+      !(newsPageLoader || newyorkPageLoader || gaurdianPageLoader) ? (
         <Box
           width="100%"
           height="100vh"
@@ -163,7 +194,7 @@ const HomePage = () => {
           <Loader />
         </Box>
       ) : (
-        <Container sx={{ marginTop: "28px" }}>
+        <Container sx={{ marginTop: "28px", marginBottom: "75px" }}>
           <Typography sx={{ fontSize: "32px", fontWeight: "500" }}>
             Daily Brief
           </Typography>
@@ -180,7 +211,14 @@ const HomePage = () => {
               newYorkTimesNews={newYorkDataState}
               authorData={authorData}
               setNewsPage={setNewsPage}
-              newsLoader={newsLoader}
+              newsPageLoader={newsPageLoader}
+              setNewsPageLoader={setNewsPageLoader}
+              setNewyorkNewsPage={setNewyorkNewsPage}
+              newyorkPageLoader={newyorkPageLoader}
+              setNewyorkNewsPageLoader={setNewyorkNewsPageLoader}
+              setGaurdianPage={setGaurdianPage}
+              gaurdianPageLoader={gaurdianPageLoader}
+              setGaurdianPageLoader={setGaurdianPageLoader}
             />
           ) : (
             <NoDataFound

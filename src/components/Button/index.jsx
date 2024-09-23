@@ -6,12 +6,14 @@ const customButton = ({
   handleClick,
   hasText = true,
   label = "Button",
+  disabled = false,
 }) => {
   return (
     <Button
       onClick={handleClick}
       variant={variant}
       sx={{ textTransform: "none" }}
+      disabled={disabled}
     >
       {hasText && label}
     </Button>

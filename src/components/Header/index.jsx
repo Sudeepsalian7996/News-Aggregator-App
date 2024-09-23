@@ -21,14 +21,14 @@ import { selectCount } from "../../features";
 import { useSelector } from "react-redux";
 
 // Main Header component
-const Header = ({ setNewsPage }) => {
+const Header = ({ setNewsPage, setGaurdianPage, setNewyorkNewsPage }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
   //Redux selectors
   const filterCount = useSelector(selectCount);
-  console.log("filterCount>>", filterCount);
+
   return (
     <>
       <AppBar
@@ -110,6 +110,8 @@ const Header = ({ setNewsPage }) => {
                     isSearchOpen={isSearchOpen}
                     setIsSearchOpen={setIsSearchOpen}
                     setNewsPage={setNewsPage}
+                    setGaurdianPage={setGaurdianPage}
+                    setNewyorkNewsPage={setNewyorkNewsPage}
                   />
                 </Box>
               </Box>
@@ -161,7 +163,11 @@ const Header = ({ setNewsPage }) => {
 
           {/* Search Bar for desktop */}
           <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
-            <SearchBar setNewsPage={setNewsPage} />
+            <SearchBar
+              setNewsPage={setNewsPage}
+              setGaurdianPage={setGaurdianPage}
+              setNewyorkNewsPage={setNewyorkNewsPage}
+            />
           </Box>
 
           {/* Customize Button for desktop */}
@@ -213,13 +219,23 @@ const Header = ({ setNewsPage }) => {
               label="Category"
               options={categories}
               setNewsPage={setNewsPage}
+              setGaurdianPage={setGaurdianPage}
+              setNewyorkNewsPage={setNewyorkNewsPage}
             />
             <Dropdown
               label="Source"
               options={sources}
               setNewsPage={setNewsPage}
+              setGaurdianPage={setGaurdianPage}
+              setNewyorkNewsPage={setNewyorkNewsPage}
             />
-            <Dropdown label="Date" options={dates} setNewsPage={setNewsPage} />
+            <Dropdown
+              label="Date"
+              options={dates}
+              setNewsPage={setNewsPage}
+              setGaurdianPage={setGaurdianPage}
+              setNewyorkNewsPage={setNewyorkNewsPage}
+            />
           </Box>
         </Toolbar>
 
@@ -253,16 +269,22 @@ const Header = ({ setNewsPage }) => {
                 label="Category"
                 options={categories}
                 setNewsPage={setNewsPage}
+                setGaurdianPage={setGaurdianPage}
+                setNewyorkNewsPage={setNewyorkNewsPage}
               />
               <Dropdown
                 label="Source"
                 options={sources}
                 setNewsPage={setNewsPage}
+                setGaurdianPage={setGaurdianPage}
+                setNewyorkNewsPage={setNewyorkNewsPage}
               />
               <Dropdown
                 label="Date"
                 options={dates}
                 setNewsPage={setNewsPage}
+                setGaurdianPage={setGaurdianPage}
+                setNewyorkNewsPage={setNewyorkNewsPage}
               />
             </Box>
           </Box>

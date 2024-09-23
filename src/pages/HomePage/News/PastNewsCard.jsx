@@ -71,7 +71,7 @@ const PastNewsCard = ({ title, sectionName, publishedAt, webUrl }) => {
             flexDirection: "row",
             justifyContent: { xs: "center", sm: "flex-end" },
             alignItems: "center",
-            gap: 1, // spacing between items
+            gap: 1,
           }}
         >
           <Button

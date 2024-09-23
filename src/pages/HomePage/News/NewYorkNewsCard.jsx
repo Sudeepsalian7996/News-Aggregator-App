@@ -7,7 +7,7 @@ const NewYorkNewsCard = ({ imageUrl, source, publishedAt, title, webUrl }) => {
   const handleCardClick = () => {
     window.open(webUrl, "_blank"); // Opens the URL in a new tab
   };
-  console.log("Imgae url new york >>", imageUrl);
+
   return (
     <Card
       sx={{

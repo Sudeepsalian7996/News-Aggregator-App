@@ -6,7 +6,13 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { setSearch } from "../../features";
 
 // Search Bar component
-const SearchBar = ({ isSearchOpen, setIsSearchOpen, setNewsPage }) => {
+const SearchBar = ({
+  isSearchOpen,
+  setIsSearchOpen,
+  setNewsPage,
+  setGaurdianPage,
+  setNewyorkNewsPage,
+}) => {
   const dispatch = useDispatch();
 
   //Handle search
@@ -14,6 +20,8 @@ const SearchBar = ({ isSearchOpen, setIsSearchOpen, setNewsPage }) => {
     if (event.key === "Enter") {
       dispatch(setSearch(event.target.value));
       setNewsPage(1);
+      setGaurdianPage(1);
+      setNewyorkNewsPage(1);
     }
   };
 
